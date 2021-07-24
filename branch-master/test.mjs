@@ -7,7 +7,7 @@ function assertOrThrow(passed, msg) {
  * this function will throw <msg> if <passed> is falsy
  */
     if (!passed) {
-        throw new Error(String(msg).slice(0, 1000));
+        throw new Error(String(msg).slice(0, 2000));
     }
 }
 
@@ -78,6 +78,157 @@ function noop() {
         },
         process_exit: processExit1,
         source: "syntax error"
+    });
+}());
+
+(function testCaseJslintCodeValidate() {
+/*
+ * this function will validate each code is valid in jslint
+ */
+    Object.values({
+        array: [
+            "new Array(0);"
+        ],
+        async_await: [
+            "async function aa() {\n    await aa();\n}",
+            "async function aa() {\n"
+            + "    try {\n"
+            + "        aa();\n"
+            + "    } catch (err) {\n"
+            + "        await err();\n"
+            + "    }\n"
+            + "}\n",
+            "async function aa() {\n"
+            + "    try {\n"
+            + "        await aa();\n"
+            + "    } catch (err) {\n"
+            + "        await err();\n"
+            + "    }\n"
+            + "}\n"
+        ],
+        date: [
+            "Date.getTime();",
+            "let aa = aa().getTime();",
+            "let aa = aa.aa().getTime();"
+        ],
+        directive: [
+            "#!\n/*jslint browser:false, node*/\n\"use strict\";",
+            "/*property aa bb*/"
+        ],
+        fart: [
+            "function aa() {\n    return () => 0;\n}"
+        ],
+        jslint_disable: [
+            "/*jslint-disable*/\n0\n/*jslint-enable*/"
+        ],
+        jslint_quiet: [
+            "0 //jslint-quiet"
+        ],
+        json: [
+            "{\"aa\":[[],-0,null]}"
+        ],
+        label: [
+            "function aa() {\n"
+            + "bb:\n"
+            + "    while (true) {\n"
+            + "        if (true) {\n"
+            + "            break bb;\n"
+            + "        }\n"
+            + "    }\n"
+            + "}\n"
+        ],
+        loop: [
+            "function aa() {\n    do {\n        aa();\n    } while (aa());\n}"
+        ],
+        module: [
+            "export default Object.freeze();",
+            "import {aa, bb} from \"aa\";\naa(bb);",
+            "import {} from \"aa\";",
+            "import(\"aa\").then(function () {\n    return;\n});",
+            "let aa = 0;\nimport(aa).then(aa).then(aa).catch(aa).finally(aa);"
+        ],
+        number: [
+            "let aa = 0.0e0;",
+            "let aa = 0b0;",
+            "let aa = 0o0;",
+            "let aa = 0x0;"
+        ],
+        optional_chaining: [
+            "let aa = aa?.bb?.cc;"
+        ],
+        param: [
+            "function aa({aa, bb}) {\n"
+            + "    return {aa, bb};\n"
+            + "}\n",
+            "function aa({constructor}) {\n"
+            + "    return {constructor};\n"
+            + "}\n"
+        ],
+        property: [
+            "let aa = aa[`!`];"
+        ],
+        regexp: [
+            "function aa() {\n    return /./;\n}",
+            "let aa = /(?!.)(?:.)(?=.)/;",
+            "let aa = /./gimuy;",
+            "let aa = /[\\--\\-]/;"
+        ],
+        ternary: [
+            (
+                "let aa = (\n    aa()\n    ? 0\n    : 1\n) "
+                + "&& (\n    aa()\n    ? 0\n    : 1\n);"
+            ),
+            "let aa = (\n    aa()\n    ? `${0}`\n    : `${1}`\n);"
+        ],
+        try_catch: [
+            "let aa = 0;\n"
+            + "try {\n"
+            + "    aa();\n"
+            + "} catch (err) {\n"
+            + "    aa = err;\n"
+            + "}\n"
+            + "try {\n"
+            + "    aa();\n"
+            + "} catch (err) {\n"
+            + "    aa = err;\n"
+            + "}\n"
+            + "aa();\n"
+        ],
+        use_strict: [
+            (
+                "\"use strict\";\n"
+                + "let aa = 0;\n"
+                + "function bb() {\n"
+                + "    \"use strict\";\n"
+                + "    return aa;\n"
+                + "}\n"
+            )
+        ],
+        var: [
+            "let [\n    aa, bb = 0\n] = 0;",
+            "let [...aa] = [...aa];",
+            "let constructor = 0;",
+            "let {\n    aa: bb\n} = 0;",
+            "let {aa, bb} = 0;",
+            "let {constructor} = 0;"
+        ]
+    }).forEach(function (codeList) {
+        let elemPrv = "";
+        codeList.forEach(function (code) {
+            let warnings;
+            // Assert codeList is sorted.
+            assertOrThrow(elemPrv < code, JSON.stringify([
+                elemPrv, code
+            ], undefined, 4));
+            elemPrv = code;
+            warnings = jslint(code, {
+                beta: true
+            }).warnings;
+            assertOrThrow(
+                warnings.length === 0,
+                JSON.stringify([code, warnings])
+            );
+        });
     });
 }());
 
@@ -212,247 +363,59 @@ function noop() {
     }).warnings.length === 1);
 }());
 
-(function testCaseJslintCodeValidate() {
-/*
- * this function will validate each code is valid in jslint
- */
-    Object.values({
-        array: [
-            "new Array(0);"
-        ],
-        async_await: [
-            "async function aa() {\n    await aa();\n}",
-            "async function aa() {\n"
-            + "    try {\n"
-            + "        aa();\n"
-            + "    } catch (err) {\n"
-            + "        await err();\n"
-            + "    }\n"
-            + "}\n",
-            "async function aa() {\n"
-            + "    try {\n"
-            + "        await aa();\n"
-            + "    } catch (err) {\n"
-            + "        await err();\n"
-            + "    }\n"
-            + "}\n"
-        ],
-        date: [
-            "Date.getTime();",
-            "let aa = aa().getTime();",
-            "let aa = aa.aa().getTime();"
-        ],
-        directive: [
-            "#!\n/*jslint browser:false, node*/\n\"use strict\";",
-            "/*property aa bb*/"
-        ],
-        fart: [
-            "function aa() {\n    return () => 0;\n}"
-        ],
-        jslint_disable: [
-            "/*jslint-disable*/\n0\n/*jslint-enable*/"
-        ],
-        jslint_quiet: [
-            "0 //jslint-quiet"
-        ],
-        json: [
-            "{\"aa\":[[],-0,null]}"
-        ],
-        label: [
-            "function aa() {\n"
-            + "bb:\n"
-            + "    while (true) {\n"
-            + "        if (true) {\n"
-            + "            break bb;\n"
-            + "        }\n"
-            + "    }\n"
-            + "}\n"
-        ],
-        loop: [
-            "function aa() {\n    do {\n        aa();\n    } while (aa());\n}"
-        ],
-        module: [
-            "export default Object.freeze();",
-            "import {aa, bb} from \"aa\";\naa(bb);",
-            "import {} from \"aa\";",
-            "import(\"aa\").then(function () {\n    return;\n});",
-            "let aa = 0;\nimport(aa).then(aa).then(aa).catch(aa).finally(aa);"
-        ],
-        number: [
-            "let aa = 0.0e0;",
-            "let aa = 0b0;",
-            "let aa = 0o0;",
-            "let aa = 0x0;"
-        ],
-        optional_chaining: [
-            "let aa = aa?.bb?.cc;"
-        ],
-        param: [
-            "function aa({aa, bb}) {\n"
-            + "    return {aa, bb};\n"
-            + "}\n",
-            "function aa({constructor}) {\n"
-            + "    return {constructor};\n"
-            + "}\n"
-        ],
-        property: [
-            "let aa = aa[`!`];"
-        ],
-        regexp: [
-            "function aa() {\n    return /./;\n}",
-            "let aa = /(?!.)(?:.)(?=.)/;",
-            "let aa = /./gimuy;",
-            "let aa = /[\\--\\-]/;"
-        ],
-        ternary: [
-            (
-                "let aa = (\n    aa()\n    ? 0\n    : 1\n) "
-                + "&& (\n    aa()\n    ? 0\n    : 1\n);"
-            ),
-            "let aa = (\n    aa()\n    ? `${0}`\n    : `${1}`\n);"
-        ],
-        try_catch: [
-            "let aa = 0;\n"
-            + "try {\n"
-            + "    aa();\n"
-            + "} catch (err) {\n"
-            + "    aa = err;\n"
-            + "}\n"
-            + "try {\n"
-            + "    aa();\n"
-            + "} catch (err) {\n"
-            + "    aa = err;\n"
-            + "}\n"
-            + "aa();\n"
-        ],
-        use_strict: [
-            "function aa() {\n    \"use strict\";\n    return;\n}"
-        ],
-        var: [
-            "\"use strict\";\nvar aa = 0;",
-            "let [\n    aa, bb = 0\n] = 0;",
-            "let [...aa] = [...aa];",
-            "let constructor = 0;",
-            "let {\n    aa: bb\n} = 0;",
-            "let {aa, bb} = 0;",
-            "let {constructor} = 0;"
-        ]
-    }).forEach(function (codeList) {
-        let elemPrv = "";
-        codeList.forEach(function (code) {
-            let warnings;
-            // Assert codeList is sorted.
-            assertOrThrow(elemPrv < code, JSON.stringify([
-                elemPrv, code
-            ], undefined, 4));
-            elemPrv = code;
-            warnings = jslint(code).warnings;
-            assertOrThrow(
-                warnings.length === 0,
-                JSON.stringify([code, warnings])
-            );
-        });
-    });
-}());
-
 (async function testCaseJslintWarningsValidate() {
 /*
  * this function will validate each jslint <warning> is raised with given
  * malformed <code>
  */
-    Array.from(String(
+    String(
         await moduleFs.promises.readFile("jslint.mjs", "utf8")
-    ).matchAll(new RegExp((
-        "\\s*?"
-        + "(\\/\\/\\s*?cause:.*?\\n(?:\\/\\/.*?\\n)*?)"
-        + "(\\s*?^[^\\/].*?(?:\\n\\s*?\".*?)?$)"
-    ), "gm"))).forEach(function ([
-        match0, causeList, warning
-    ]) {
-        let elemPrv = "";
-        let expectedWarningCode;
-        let fnc;
-        // debug match0
-        // console.error(match0.trim().replace((/\n\n/g), "\n"));
-        assertOrThrow(
-            match0.indexOf("\n\n" + causeList + "\n    ") === 0,
-            JSON.stringify([
-                match0, causeList
-            ], undefined, 4)
-        );
-        warning = warning.match(
-            "("
-            + "at_margin"
-            + "|expected_at"
-            + "|left_check"
-            + "|no_space_only"
-            + "|one_space"
-            + "|one_space_only"
-            + "|semicolon"
-            + "|stop"
-            + "|stop_at"
-            + "|warn"
-            + "|warn_at"
-            + "|warn_if_unordered"
-            + "|warn_if_unordered_case_statement"
-            + ")"
-            + "\\\u0028\\s*?\"?"
-            + "(\\S[^\n\"]+)"
-        );
-        if (warning) {
-            expectedWarningCode = warning[2];
-            fnc = warning[1];
-            switch (fnc) {
-            case "at_margin":
-            case "expected_at":
-                expectedWarningCode = "expected_a_at_b_c";
-                break;
-            case "left_check":
-                expectedWarningCode = "unexpected_a";
-                break;
-            case "no_space_only":
-                expectedWarningCode = "unexpected_space_a_b";
-                break;
-            case "one_space":
-            case "one_space_only":
-                expectedWarningCode = "expected_space_a_b";
-                break;
-            case "semicolon":
-                expectedWarningCode = "expected_a_b";
-                break;
-            case "warn_if_unordered":
-            case "warn_if_unordered_case_statement":
-                expectedWarningCode = "expected_a_b_ordered_before_c_d";
-                break;
-            }
-        }
-        causeList.split(
-            /\/\/\u0020cause:[\n|\u0020]/
-        ).slice(1).forEach(function (cause) {
-            assertOrThrow(cause === cause.trim() + "\n", JSON.stringify(cause));
-            cause = (
-                expectedWarningCode === "too_long"
-                ? "//".repeat(100)
-                : cause[0] === "\""
-                ? JSON.parse(cause)
-                : cause.replace((
-                    /^\/\/\u0020/gm
-                ), "")
+    ).replace((
+        /(\n\s*?\/\/\s*?test_cause:\s*?)(\S[\S\s]*?\S)(\n\n\s*?)\u0020*?\S/g
+    ), function (match0, header, causeList, footer) {
+        let tmp;
+        // console.error(match0);
+        // Validate header.
+        assertOrThrow(header === "\n\n// test_cause:\n", match0);
+        // Validate footer.
+        assertOrThrow(footer === "\n\n", match0);
+        // Validate causeList.
+        causeList = causeList.replace((
+            /^\/\/\u0020/gm
+        ), "").replace((
+            /^\["\n([\S\s]*?)\n"(,.*?)$/gm
+        ), function (ignore, source, param) {
+            source = "[" + JSON.stringify(source) + param;
+            assertOrThrow(source.length > (80 - 3), source);
+            return source;
+        }).replace((
+            /\u0020\/\/jslint-quiet$/gm
+        ), "");
+        tmp = causeList.split("\n").map(function (cause) {
+            return (
+                "["
+                + JSON.parse(cause).map(function (elem) {
+                    return JSON.stringify(elem);
+                }).join(", ")
+                + "]"
             );
-            // Assert causeList is sorted.
-            assertOrThrow(elemPrv < cause, JSON.stringify([
-                elemPrv, cause
-            ], undefined, 4));
-            elemPrv = cause;
-            // Assert expectedWarningCode from cause.
+        }).sort().join("\n");
+        assertOrThrow(causeList === tmp, "\n" + causeList + "\n\n" + tmp);
+        causeList.split("\n").forEach(function (cause) {
+            cause = JSON.parse(cause);
+            tmp = jslint(cause[0], {
+                beta: true,
+                test_cause: true
+            }).causes;
+            // Validate cause.
             assertOrThrow(
-                jslint(cause).warnings.some(function ({
-                    code
-                }) {
-                    return code === expectedWarningCode;
-                }) || !expectedWarningCode,
-                "\n" + cause.trim()
+                tmp[JSON.stringify(cause.slice(1))],
+                (
+                    "\n" + JSON.stringify(cause) + "\n\n"
+                    + Object.keys(tmp).sort().join("\n")
+                )
             );
         });
+        return "";
     });
 }());

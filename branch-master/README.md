@@ -9,7 +9,7 @@ Douglas Crockford <douglas@crockford.com>
 
 
 # Status
-| Branch | [master<br>(v2021.6.30)](https://github.com/jslint-org/jslint/tree/master) | [beta<br>(Web Demo)](https://github.com/jslint-org/jslint/tree/beta) | [alpha<br>(Development)](https://github.com/jslint-org/jslint/tree/alpha) |
+| Branch | [master<br>(v2021.7.24)](https://github.com/jslint-org/jslint/tree/master) | [beta<br>(Web Demo)](https://github.com/jslint-org/jslint/tree/beta) | [alpha<br>(Development)](https://github.com/jslint-org/jslint/tree/alpha) |
 |--:|:--:|:--:|:--:|
 | CI | [![ci](https://github.com/jslint-org/jslint/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/jslint-org/jslint/actions?query=branch%3Amaster) | [![ci](https://github.com/jslint-org/jslint/actions/workflows/ci.yml/badge.svg?branch=beta)](https://github.com/jslint-org/jslint/actions?query=branch%3Abeta) | [![ci](https://github.com/jslint-org/jslint/actions/workflows/ci.yml/badge.svg?branch=alpha)](https://github.com/jslint-org/jslint/actions?query=branch%3Aalpha) |
 | Coverage | [![coverage](https://jslint-org.github.io/jslint/branch-master/.build/coverage/coverage-badge.svg)](https://jslint-org.github.io/jslint/branch-master/.build/coverage/index.html) | [![coverage](https://jslint-org.github.io/jslint/branch-master/.build/coverage/coverage-badge.svg)](https://jslint-org.github.io/jslint/branch-master/.build/coverage/index.html) | [![coverage](https://jslint-org.github.io/jslint/branch-master/.build/coverage/coverage-badge.svg)](https://jslint-org.github.io/jslint/branch-master/.build/coverage/index.html) |
@@ -23,15 +23,24 @@ Douglas Crockford <douglas@crockford.com>
 [![screenshot](https://jslint-org.github.io/jslint/branch-master/.build/screenshot-browser-_2fjslint_2fbranch-beta_2findex.html.png)](https://jslint-org.github.io/jslint/index.html)
 
 
+# Web Demo Archived
+- [Web Demo 2020 (can lint ES6)](https://www.jslint.com/branch-v2020.11.6/index.html)
+- [Web Demo 2014 (can lint ES5 only)](https://www.jslint.com/branch-v2014.7.8/jslint.html)
+- [Web Demo 2013 (can lint ES5, CSS, HTML)](https://www.jslint.com/branch-v2013.3.13/jslint.html)
+
+
 # Install
-### 1. To install, just download https://www.jslint.com/jslint.mjs:
-```shell
+## To install, just download https://www.jslint.com/jslint.mjs and save to file:
+```shell <!-- shRunWithScreenshotTxt .build/screenshot-install-download.svg -->
 #!/bin/sh
 
 curl -L https://www.jslint.com/jslint.mjs > jslint.mjs
 ```
+- shell output
 
-### 2. To run `jslint.mjs` from command-line:
+![screenshot.svg](https://jslint-org.github.io/jslint/branch-master/.build/screenshot-install-download.svg)
+
+## To run `jslint.mjs` from command-line:
 ```shell <!-- shRunWithScreenshotTxt .build/screenshot-install-cli-file.svg -->
 #!/bin/sh
 
@@ -43,7 +52,7 @@ node jslint.mjs hello.js
 
 ![screenshot.svg](https://jslint-org.github.io/jslint/branch-master/.build/screenshot-install-cli-file.svg)
 
-### 3. To import `jslint.mjs` as es-module:
+## To import `jslint.mjs` as es-module:
 ```shell <!-- shRunWithScreenshotTxt .build/screenshot-install-import.svg -->
 #!/bin/sh
 
@@ -51,8 +60,11 @@ node --input-type=module -e '
 
 /*jslint devel*/
 import jslint from "./jslint.mjs";
-let code = "console.log(\u0027hello world\u0027);\n";
-let result = jslint(code);
+let globals = ["caches", "indexedDb"];
+let options = {browser: true};
+let result;
+let source = "console.log(\u0027hello world\u0027);\n";
+result = jslint(source, options, globals);
 result.warnings.forEach(function ({
     formatted_message
 }) {
@@ -65,7 +77,7 @@ result.warnings.forEach(function ({
 
 ![screenshot.svg](https://jslint-org.github.io/jslint/branch-master/.build/screenshot-install-import.svg)
 
-### 4. To jslint entire directory:
+## To jslint entire directory:
 ```shell <!-- shRunWithScreenshotTxt .build/screenshot-install-cli-dir.svg -->
 #!/bin/sh
 

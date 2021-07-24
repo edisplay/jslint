@@ -130,6 +130,16 @@ process.exit(Number(
 import moduleFs from "fs";
 import moduleChildProcess from "child_process";
 (async function () {
+    var screenshotCurl = await moduleFs.promises.stat("jslint.mjs");
+    screenshotCurl = String(`
+echo "\
+% Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                     Dload  Upload   Total   Spent    Left  Speed
+100  250k  100  250k    0     0   250k      0  0:00:01 --:--:--  0:00:01  250k\
+"
+    `).trim().replace((
+        /250/g
+    ), Math.floor(screenshotCurl.size / 1024));
     [
         // parallel-task - screenshot files
         [
@@ -174,7 +184,10 @@ import moduleChildProcess from "child_process";
                 /^/gm
             ), "> ")
             + "\n\n\n\u0027\n"
-            + script
+            + script.replace(
+                "curl -L https://www.jslint.com/jslint.mjs > jslint.mjs",
+                screenshotCurl
+            )
         ));
         moduleChildProcess.spawn(
             "./ci.sh",
@@ -193,64 +206,59 @@ import moduleChildProcess from "child_process";
     });
 }());
 ' # '
-    # seo - invalidate cached-assets and inline css
+    # seo - inline css-assets and invalidate cached-assets
     node --input-type=module -e '
 import moduleFs from "fs";
-var cacheKey = Math.random().toString(36).slice(-4);
 (async function () {
-    var result = await moduleFs.promises.readFile("browser.mjs", "utf8");
+    var cacheKey = Math.random().toString(36).slice(-4);
+    var fileDict = {};
+    await Promise.all([
+        "asset-codemirror-rollup.css",
+        "browser.mjs",
+        "index.html"
+    ].map(async function (file) {
+        fileDict[file] = await moduleFs.promises.readFile(file, "utf8");
+    }));
+
+// Inline css-assets.
+
+    fileDict["index.html"] = fileDict["index.html"].replace((
+        "\n<link rel=\"stylesheet\" href=\"asset-codemirror-rollup.css\">\n"
+    ), function () {
+        return (
+            "\n<style>\n"
+            + fileDict["asset-codemirror-rollup.css"].trim()
+            + "\n</style>\n"
+        );
+    });
+    fileDict["index.html"] = fileDict["index.html"].replace((
+        "\n<style class=\"JSLINT_REPORT_STYLE\"></style>\n"
+    ), function () {
+        return fileDict["browser.mjs"].match(
+            /\n<style\sclass="JSLINT_REPORT_STYLE">\n[\S\s]*?\n<\/style>\n/
+        )[0];
+    });
 
 // Invalidate cached-assets.
 
-    result = result.replace((
+    fileDict["browser.mjs"] = fileDict["browser.mjs"].replace((
         /^import\u0020.+?\u0020from\u0020".+?\.(?:js|mjs)\b/gm
     ), function (match0) {
         return `${match0}?cc=${cacheKey}`;
     });
-
-// Write file.
-
-    await moduleFs.promises.writeFile("browser.mjs", result);
-}());
-(async function () {
-    var result = await moduleFs.promises.readFile("index.html", "utf8");
-
-// Invalidate cached-assets.
-
-    result = result.replace((
+    fileDict["index.html"] = fileDict["index.html"].replace((
         /\b(?:href|src)=".+?\.(?:css|js|mjs)\b/g
     ), function (match0) {
         return `${match0}?cc=${cacheKey}`;
     });
 
-// Inline css-assets.
-
-    result.replace((
-        /\n<link\u0020rel="stylesheet"\u0020href="([^"]+?)">\n/g
-    ), async function (match0, url) {
-        var data = await moduleFs.promises.readFile(url.split("?")[0], "utf8");
-        result = result.replace(match0, function () {
-            return `\n<style>\n${data.trim()}\n</style>\n`;
-        });
-        return "";
-    });
-    result.replace((
-        `\n<style id="#JSLINT_REPORT_STYLE"></style>\n`
-    ), async function (match0) {
-        var data = await moduleFs.promises.readFile("browser.mjs", "utf8");
-        result = result.replace(match0, function () {
-            return data.match(
-                /\n<style\sid="#JSLINT_REPORT_STYLE">\n[\S\s]*?\n<\/style>\n/
-            )[0];
-        });
-        return "";
-    });
-
 // Write file.
 
-    process.on("exit", function () {
-        moduleFs.writeFileSync("index.html", result); //jslint-quiet
-    });
+    await Promise.all(Object.entries(fileDict).map(function ([
+        file, data
+    ]) {
+        moduleFs.promises.writeFile(file, data);
+    }));
 }());
 ' # '
     # add dir .build
@@ -326,11 +334,10 @@ shCiBase() {(set -e
     # coverage-hack - test jslint's invalid-file handling-behavior
     mkdir -p .test-dir.js
     # test jslint's cli handling-behavior
-    printf "./jslint.cjs .\n"
-    chmod 755 jslint.cjs
-    ./jslint.cjs .
-    printf "./jslint.mjs .\n"
-    ./jslint.mjs .
+    printf "node jslint.cjs .\n"
+    node jslint.cjs .
+    printf "node jslint.mjs .\n"
+    node jslint.mjs .
     printf "node test.mjs\n"
     (set -e
         # coverage-hack - test jslint's cli handling-behavior
@@ -425,7 +432,7 @@ import moduleUrl from "url";
         }
         data = await moduleFs.promises.readFile(file, "utf8");
         data.replace((
-            /\bhttps?:\/\/.*?(?:[\s"):\]]|$)/gm
+            /\bhttps?:\/\/.*?(?:[\s")\]]|\W?$)/gm
         ), function (url) {
             var req;
             url = url.slice(0, -1).replace((
@@ -440,9 +447,7 @@ import moduleUrl from "url";
                 process.env.GITHUB_REPOSITORY || "jslint-org/jslint"
             ).replace("/", ".github.io/"));
             if (url.startsWith("http://")) {
-                throw new Error(
-                    "shDirHttplinkValidate - insecure link " + url
-                );
+                throw new Error("shDirHttplinkValidate - insecure link " + url);
             }
             // ignore duplicate-link
             if (dict.hasOwnProperty(url)) {
@@ -653,24 +658,6 @@ import moduleUrl from "url";
         return argList[0];
     };
 }());
-(function jslintDir() {
-/*
- * this function will jslint current-directory
- */
-    moduleFs.stat((
-        process.env.HOME + "/jslint.mjs"
-    ), function (ignore, exists) {
-        if (exists) {
-            moduleChildProcess.spawn("node", [
-                process.env.HOME + "/jslint.mjs", "."
-            ], {
-                stdio: [
-                    "ignore", 1, 2
-                ]
-            });
-        }
-    });
-}());
 (async function httpFileServer() {
 /*
  * this function will start http-file-server
@@ -758,6 +745,24 @@ import moduleUrl from "url";
             res.end(data);
         });
     }).listen(process.env.PORT);
+}());
+(function jslintDir() {
+/*
+ * this function will jslint current-directory
+ */
+    moduleFs.stat((
+        process.env.HOME + "/jslint.mjs"
+    ), function (ignore, exists) {
+        if (exists) {
+            moduleChildProcess.spawn("node", [
+                process.env.HOME + "/jslint.mjs", "."
+            ], {
+                stdio: [
+                    "ignore", 1, 2
+                ]
+            });
+        }
+    });
 }());
 (function replStart() {
 /*
@@ -971,7 +976,6 @@ shImageToDataUri() {(set -e
 import moduleFs from "fs";
 import moduleHttps from "https";
 (async function () {
-    "use strict";
     let file;
     let result;
     file = process.argv[1];
@@ -1012,6 +1016,12 @@ shJsonNormalize() {(set -e
     node --input-type=module -e '
 import moduleFs from "fs";
 (async function () {
+    function identity(val) {
+
+// This function will return <val>.
+
+        return val;
+    }
     function objectDeepCopyWithKeysSorted(obj) {
 
 // this function will recursively deep-copy <obj> with keys sorted
@@ -1034,12 +1044,6 @@ import moduleFs from "fs";
             sorted[key] = objectDeepCopyWithKeysSorted(obj[key]);
         });
         return sorted;
-    }
-    function identity(val) {
-
-// This function will return <val>.
-
-        return val;
     }
     console.error("shJsonNormalize - " + process.argv[1]);
     moduleFs.promises.writeFile(

@@ -30,6 +30,9 @@
 /*jslint beta, browser*/
 
 /*property
+    dom_style_report_unmatched,
+    indentSelection,
+    slice, somethingSelected,
     CodeMirror, Pos, Tab, addEventListener, checked, click, closest, closure,
     column, context, ctrlKey, currentTarget, dispatchEvent, display, edition,
     editor, error, exports, extraKeys, filter, forEach, from, fromTextArea,
@@ -45,7 +48,7 @@
     warnings, width
 */
 
-import jslint from "./jslint.mjs?cc=s51r";
+import jslint from "./jslint.mjs?cc=qgcs";
 
 // This is the web script companion file for JSLint. It includes code for
 // interacting with the browser and displaying the reports.
@@ -55,6 +58,38 @@ let jslint_option_dict = {
     lintOnChange: false
 };
 let mode_debug;
+
+function dom_style_report_unmatched() {
+
+// Debug css-style.
+
+    let style_list = [];
+    Array.from(document.querySelectorAll("style")).forEach(function (elem) {
+        elem.innerHTML.replace((
+            /\/\*[\S\s]*?\*\/|;|\}/g
+        ), "\n").replace((
+            /^([^\n\u0020@].*?)[,{:].*?$/gm
+        ), function (match0, match1) {
+            let ii;
+            try {
+                ii = document.querySelectorAll(match1).length;
+            } catch (err) {
+                console.error(match1 + "\n" + err); //jslint-quiet
+            }
+            if (ii <= 1 && !(
+                /^0\u0020(?:(body\u0020>\u0020)?(?:\.button|\.readonly|\.styleColorError|\.textarea|\.uiAnimateSlide|a|base64|body|code|div|input|pre|textarea)(?:,|\u0020\{))|^[1-9]\d*?\u0020#/m
+            ).test(ii + " " + match0)) {
+                style_list.push(ii + " " + match0);
+            }
+            return "";
+        });
+    });
+    style_list.sort().reverse().forEach(function (elem, ii, list) {
+        console.error( //jslint-quiet
+            "dom_style_report_unmatched " + (list.length - ii) + ". " + elem
+        );
+    });
+}
 
 function jslint_plugin_codemirror(CodeMirror) {
 
@@ -105,9 +140,20 @@ function jslint_report_html({
     let length_80 = 1111;
 
     function detail(title, list) {
-        if (Array.isArray(list) && list.length > 0) {
-            html += `<dt>${entityify(title)}</dt><dd>${list.join(", ")}</dd>`;
-        }
+        return (
+            (Array.isArray(list) && list.length > 0)
+            ? (
+
+// Google Lighthouse Accessibility - <dl>'s do not contain only properly-ordered
+// <dt> and <dd> groups, <script>, <template> or <div> elements.
+
+                "<dl>"
+                + "<dt>" + entityify(title) + "</dt>"
+                + "<dd>" + list.join(", ") + "</dd>"
+                + "</dl>"
+            )
+            : ""
+        );
     }
 
     function entityify(str) {
@@ -124,12 +170,15 @@ function jslint_report_html({
     }
 
 // Produce the HTML Error Report.
-// <cite><address>LINE_NUMBER</address>MESSAGE</cite>
+// <cite>
+//     <address>LINE_NUMBER</address>
+//     MESSAGE
+// </cite>
 // <samp>EVIDENCE</samp>
 
-    html += `<div class="JSLINT_" id="JSLINT_REPORT_HTML">`;
+    html += "<div class=\"JSLINT_\" id=\"JSLINT_REPORT_HTML\">\n";
     html += String(`
-<style id="#JSLINT_REPORT_STYLE">
+<style class="JSLINT_REPORT_STYLE">
 /*csslint
     box-model: false,
     ids:false,
@@ -292,6 +341,9 @@ pyNj+JctcQLXenBOCms46aMkenIx45WpXqxxVJQLz/vgpmAVa0fmDv6Pue9xVTBPfVxCUGfj\
 .JSLINT_ {
     font-family: daley, sans-serif;
     font-size: 14px;
+    -ms-text-size-adjust: none;
+    -webkit-text-size-adjust: none;
+    text-size-adjust: none;
 }
 .JSLINT_ fieldset legend,
 .JSLINT_ .center {
@@ -344,68 +396,73 @@ body {
     width: 100%;
     word-wrap: break-word;
 }
-.JSLINT_ #JSLINT_REPORT_FUNCTIONS dd {
-    padding-left: 128px;
+.JSLINT_ #JSLINT_REPORT_FUNCTIONS .level {
+    background: cornsilk;
+    padding: 8px 16px;
 }
-.JSLINT_ #JSLINT_REPORT_FUNCTIONS dfn {
+.JSLINT_ #JSLINT_REPORT_FUNCTIONS .level dd {
+    line-height: 20px;
+    padding-left: 120px;
+}
+.JSLINT_ #JSLINT_REPORT_FUNCTIONS .level dfn {
     display: block;
     font-style: normal;
-    padding-bottom: 4px;
+    font-weight: bold;
+    line-height: 20px;
 }
-.JSLINT_ #JSLINT_REPORT_FUNCTIONS dl {
-    background: cornsilk;
-    padding: 8px 16px 4px 16px;
+.JSLINT_ #JSLINT_REPORT_FUNCTIONS .level dl {
+    position: relative
 }
-.JSLINT_ #JSLINT_REPORT_FUNCTIONS dl.level0 {
+.JSLINT_ #JSLINT_REPORT_FUNCTIONS .level dt {
+    font-style: italic;
+    line-height: 20px;
+    position: absolute;
+    text-align: right;
+    width: 100px;
+}
+.JSLINT_ #JSLINT_REPORT_FUNCTIONS .level0 {
     background: white;
 }
-.JSLINT_ #JSLINT_REPORT_FUNCTIONS dl.level1 {
+.JSLINT_ #JSLINT_REPORT_FUNCTIONS .level1 {
     /* yellow */
     background: #ffffe0;
     margin-left: 16px;
 }
-.JSLINT_ #JSLINT_REPORT_FUNCTIONS dl.level2 {
+.JSLINT_ #JSLINT_REPORT_FUNCTIONS .level2 {
     /* green */
     background: #e0ffe0;
     margin-left: 32px;
 }
-.JSLINT_ #JSLINT_REPORT_FUNCTIONS dl.level3 {
+.JSLINT_ #JSLINT_REPORT_FUNCTIONS .level3 {
     /* blue */
     background: #D0D0ff;
     margin-left: 48px;
 }
-.JSLINT_ #JSLINT_REPORT_FUNCTIONS dl.level4 {
+.JSLINT_ #JSLINT_REPORT_FUNCTIONS .level4 {
     /* purple */
     background: #ffe0ff;
     margin-left: 64px;
 }
-.JSLINT_ #JSLINT_REPORT_FUNCTIONS dl.level5 {
+.JSLINT_ #JSLINT_REPORT_FUNCTIONS .level5 {
     /* red */
     background: #ffe0e0;
     margin-left: 80px;
 }
-.JSLINT_ #JSLINT_REPORT_FUNCTIONS dl.level6 {
+.JSLINT_ #JSLINT_REPORT_FUNCTIONS .level6 {
     /* orange */
     background: #ffe390;
     margin-left: 96px;
 }
-.JSLINT_ #JSLINT_REPORT_FUNCTIONS dl.level7 {
+.JSLINT_ #JSLINT_REPORT_FUNCTIONS .level7 {
     /* gray */
     background: #e0e0e0;
     margin-left: 112px;
 }
-.JSLINT_ #JSLINT_REPORT_FUNCTIONS dl.level8 {
+.JSLINT_ #JSLINT_REPORT_FUNCTIONS .level8 {
     margin-left: 128px;
 }
-.JSLINT_ #JSLINT_REPORT_FUNCTIONS dl.level9 {
+.JSLINT_ #JSLINT_REPORT_FUNCTIONS .level9 {
     margin-left: 144px;
-}
-.JSLINT_ #JSLINT_REPORT_FUNCTIONS dt {
-    float: left;
-    font-style: italic;
-    padding-top: 2px;
-    text-align: right;
-    width: 100px;
 }
 .JSLINT_ #JSLINT_REPORT_PROPERTIES {
     background: transparent;
@@ -435,15 +492,18 @@ body {
     overflow-y: auto;
 }
 .JSLINT_ #JSLINT_REPORT_WARNINGS > legend {
-    background: indianred;
+/* Google Lighthouse Accessibility - Background and foreground colors do not */
+/* have a sufficient contrast ratio. */
+    /* background: indianred; */
+    background: #b44;
 }
 </style>
-            `).trim();
-    html += `<fieldset id="JSLINT_REPORT_WARNINGS">`;
-    html += `<legend>Report: Warnings</legend>`;
-    html += `<div>`;
+            `).trim() + "\n";
+    html += "<fieldset id=\"JSLINT_REPORT_WARNINGS\">\n";
+    html += "<legend>Report: Warnings</legend>\n";
+    html += "<div>\n";
     if (stop) {
-        html += `<div class="center">JSLint was unable to finish.</div>`;
+        html += "<div class=\"center\">JSLint was unable to finish.</div>\n";
     }
     warnings.forEach(function ({
         column,
@@ -457,21 +517,24 @@ body {
             + "<address>" + entityify(line + ": " + column) + "</address>"
             + entityify((ii + 1) + ". " + message)
             + "</cite>"
-            + "<samp>" + entityify(line_source + "\n" + stack_trace) + "</samp>"
+            + "<samp>"
+            + entityify(line_source.slice(0, 400) + "\n" + stack_trace)
+            + "</samp>\n"
         );
     });
     if (warnings.length === 0) {
-        html += `<div class="center">There are no warnings.</div>`;
+        html += "<div class=\"center\">There are no warnings.</div>\n";
     }
-    html += `</div>`;
-    html += `</fieldset>`;
+    html += "</div>\n";
+    html += "</fieldset>\n";
 
 // Produce the /*property*/ directive.
 
-    html += `<fieldset id="JSLINT_REPORT_PROPERTIES">`;
-    html += `<legend>Report: Properties</legend>`;
-    html += `<textarea readonly>`;
-    html += `/*property`;
+    html += "<fieldset id=\"JSLINT_REPORT_PROPERTIES\">\n";
+    html += "<legend>Report: Properties</legend>\n";
+    html += "<label>\n";
+    html += "<textarea readonly>";
+    html += "/*property";
     Object.keys(property).sort().forEach(function (key, ii) {
         if (ii !== 0) {
             html += ",";
@@ -485,26 +548,35 @@ body {
         length_80 += key.length;
     });
     html += "\n*/\n";
-    html += `</textarea>`;
-    html += `</fieldset>`;
+    html += "</textarea>\n";
+    html += "</label>\n";
+    html += "</fieldset>\n";
 
 // Produce the HTML Function Report.
-// <dl class=LEVEL><address>LINE_NUMBER</address>FUNCTION_NAME_AND_SIGNATURE
-//     <dt>DETAIL</dt><dd>NAMES</dd>
-// </dl>
+// <div class=LEVEL>
+//     <address>LINE_NUMBER</address>
+//     <dfn>FUNCTION_NAME_AND_SIGNATURE</dfn>
+//     <dl>
+//         <dt>DETAIL</dt>
+//         <dd>NAMES</dd>
+//     </dl>
+// </div>
 
-    html += `<fieldset id="JSLINT_REPORT_FUNCTIONS">`;
-    html += `<legend>Report: Functions</legend>`;
-    html += `<div>`;
+    html += "<fieldset id=\"JSLINT_REPORT_FUNCTIONS\">\n";
+    html += "<legend>Report: Functions</legend>\n";
+    html += "<div>\n";
     if (json) {
-        return (
+
+// Bugfix - fix website crashing when linting pure json-object.
+// return (
+
+        html += (
             warnings.length === 0
-            ? "<div class=\"center\">JSON: good.</div>"
-            : "<div class=\"center\">JSON: bad.</div>"
+            ? "<div class=\"center\">JSON: good.</div>\n"
+            : "<div class=\"center\">JSON: bad.</div>\n"
         );
-    }
-    if (functions.length === 0) {
-        html += `<div class="center">There are no functions.</div>`;
+    } else if (functions.length === 0) {
+        html += "<div class=\"center\">There are no functions.</div>\n";
     }
     exports = Object.keys(exports).sort();
     froms.sort();
@@ -515,11 +587,11 @@ body {
         : "global"
     );
     if (global.length + froms.length + exports.length > 0) {
-        html += "<dl class=level0>";
-        detail(module, global);
-        detail("import from", froms);
-        detail("export", exports);
-        html += "</dl>";
+        html += "<div class=\"level level0\">\n";
+        html += detail(module, global);
+        html += detail("import from", froms);
+        html += detail("export", exports);
+        html += "</div>\n";
     }
     functions.forEach(function (the_function) {
         let {
@@ -527,13 +599,16 @@ body {
             level,
             line,
             name,
-            parameters,
+
+// Bugfix - fix html-report from crashing if parameters is undefined.
+
+            parameters = [],
             signature
         } = the_function;
         let list = Object.keys(context);
         let params;
         html += (
-            "<dl class=level" + entityify(level) + ">"
+            "<div class=\"level level" + entityify(level) + "\">"
             + "<address>" + entityify(line) + "</address>"
             + "<dfn>"
             + (
@@ -541,11 +616,8 @@ body {
                 ? entityify(signature) + " =>"
                 : (
                     typeof name === "string"
-                    ? (
-                        "<b>\u00ab" + entityify(name)
-                        + "\u00bb</b>"
-                    )
-                    : "<b>" + entityify(name.id) + "</b>"
+                    ? "\u00ab" + entityify(name) + "\u00bb"
+                    : entityify(name.id)
                 )
             ) + entityify(signature)
             + "</dfn>"
@@ -569,39 +641,39 @@ body {
                 params.push(id);
             }
         });
-        detail("parameter", params.sort());
+        html += detail("parameter", params.sort());
         list.sort();
-        detail("variable", list.filter(function (id) {
+        html += detail("variable", list.filter(function (id) {
             return (
                 context[id].role === "variable"
                 && context[id].parent === the_function
             );
         }));
-        detail("exception", list.filter(function (id) {
+        html += detail("exception", list.filter(function (id) {
             return context[id].role === "exception";
         }));
-        detail("closure", list.filter(function (id) {
+        html += detail("closure", list.filter(function (id) {
             return (
                 context[id].closure === true
                 && context[id].parent === the_function
             );
         }));
-        detail("outer", list.filter(function (id) {
+        html += detail("outer", list.filter(function (id) {
             return (
                 context[id].parent !== the_function
                 && context[id].parent.id !== "(global)"
             );
         }));
-        detail(module, list.filter(function (id) {
+        html += detail(module, list.filter(function (id) {
             return context[id].parent.id === "(global)";
         }));
-        detail("label", list.filter(function (id) {
+        html += detail("label", list.filter(function (id) {
             return context[id].role === "label";
         }));
-        html += "</dl>";
+        html += "</div>\n";
     });
-    html += `</div>`;
-    html += `</fieldset>`;
+    html += "</div>\n";
+    html += "</fieldset>\n";
     html += String(`
 <script>
 /*jslint browser*/
@@ -623,8 +695,8 @@ body {
     window.onresize = jslint_ui_onresize;
 }());
 </script>
-    `).trim();
-    html += `</div>\n`;
+    `).trim() + "\n";
+    html += "</div>\n";
     return html;
 }
 
@@ -633,25 +705,38 @@ async function jslint_ui_call() {
 
 // Show ui-loader-animation.
 
+    document.querySelector("#uiLoader1 > div").textContent = "Linting";
     document.querySelector("#uiLoader1").style.display = "flex";
+    try {
 
 // Wait awhile before running cpu-intensive linter so ui-loader doesn't jank.
 
-    await new Promise(function (resolve) {
-        setTimeout(resolve);
-    });
+        await new Promise(function (resolve) {
+            setTimeout(resolve);
+        });
+
+// Update jslint_option_dict from ui-inputs.
+
+        document.querySelectorAll(
+            "#JSLINT_OPTIONS input[type=checkbox]"
+        ).forEach(function (elem) {
+            jslint_option_dict[elem.value] = elem.checked;
+        });
 
 // Execute linter.
 
-    editor.performLint();
+        editor.performLint();
 
 // Generate the reports.
 // Display the reports.
 
-    document.querySelector(
-        "#JSLINT_REPORT_HTML"
-    ).outerHTML = jslint_report_html(jslint_option_dict.result);
-    jslint_ui_onresize();
+        document.querySelector(
+            "#JSLINT_REPORT_HTML"
+        ).outerHTML = jslint_report_html(jslint_option_dict.result);
+        jslint_ui_onresize();
+    } catch (err) {
+        console.error(err); //jslint-quiet
+    }
 
 // Hide ui-loader-animation.
 
@@ -664,7 +749,6 @@ function jslint_ui_onresize() {
     let content_width = document.querySelector(
         "#JSLINT_OPTIONS"
     ).offsetWidth;
-    let style_list = [];
 
 // Set explicit content-width for overflow to work properly.
 
@@ -676,34 +760,6 @@ function jslint_ui_onresize() {
         }
     });
     editor.setSize(content_width);
-
-// Debug css-style.
-
-    Array.from(document.querySelectorAll("style")).forEach(function (elem) {
-        elem.innerHTML.replace((
-            /\/\*[\S\s]*?\*\/|;|\}/g
-        ), "\n").replace((
-            /^([^\n\u0020@].*?)[,{:].*?$/gm
-        ), function (match0, match1) {
-            let ii;
-            try {
-                ii = document.querySelectorAll(match1).length;
-            } catch (err) {
-                console.error(match1 + "\n" + err); //jslint-quiet
-            }
-            if (ii <= 1 && !(
-                /^0\u0020(?:(body\u0020>\u0020)?(?:\.button|\.readonly|\.styleColorError|\.textarea|\.uiAnimateSlide|a|base64|body|code|div|input|pre|textarea)(?:,|\u0020\{))|^[1-9]\d*?\u0020#/m
-            ).test(ii + " " + match0)) {
-                style_list.push(ii + " " + match0);
-            }
-            return "";
-        });
-    });
-    style_list.sort().reverse().forEach(function (elem, ii, list) {
-        console.error( //jslint-quiet
-            "domStyleReportUnmatched " + (list.length - ii) + ". " + elem
-        );
-    });
 }
 
 (function () {
@@ -712,7 +768,7 @@ function jslint_ui_onresize() {
 // Init edition.
 
     document.querySelector("#JSLINT_EDITION").textContent = (
-        `Edition: ${jslint.edition}`
+        "Edition: " + jslint.edition
     );
 
 // Init mode_debug.
@@ -726,8 +782,13 @@ function jslint_ui_onresize() {
         "#JSLINT_SOURCE textarea"
     ), {
         extraKeys: {
-            Tab: function (editor) {
-                editor.replaceSelection("    ");
+            "Shift-Tab": "indentLess",
+            Tab: function (cm) {
+                if (cm.somethingSelected()) {
+                    cm.indentSelection("add");
+                    return;
+                }
+                cm.replaceSelection("    ");
             }
         },
         gutters: ["CodeMirror-lint-markers"],
@@ -795,52 +856,50 @@ function jslint_ui_onresize() {
     };
     document.querySelector(
         "#JSLINT_OPTIONS"
-    ).onclick = function ({
-        target
-    }) {
+    ).onclick = function (evt) {
         let elem;
-        elem = target.closest(
+        elem = evt.target.closest(
             "#JSLINT_OPTIONS div[title]"
         );
         elem = elem && elem.querySelector("input[type=checkbox]");
-        if (elem && elem !== target) {
+        if (elem && elem !== evt.target) {
+            evt.preventDefault();
+            evt.stopPropagation();
             elem.checked = !elem.checked;
         }
-        document.querySelectorAll(
-            "#JSLINT_OPTIONS input[type=checkbox]"
-        ).forEach(function (elem) {
-            jslint_option_dict[elem.value] = elem.checked;
-        });
     };
     window.addEventListener("load", jslint_ui_onresize);
     window.addEventListener("resize", jslint_ui_onresize);
     if (!mode_debug) {
-        editor.setValue(`#!/usr/bin/env node
-
+        editor.setValue(String(`
+#!/usr/bin/env node
 /*jslint browser, node*/
-/*global $, jQuery*/ //jslint-quiet
-
+/*global caches, indexedDb*/ //jslint-quiet
 import https from "https";
 import jslint from \u0022./jslint.mjs\u0022;
+
+/*jslint-disable*/
+    Syntax error.\u0020\u0020\u0020\u0020
+/*jslint-enable*/
+
+eval("console.log(\\"hello world\\");"); //jslint-quiet
+
+eval("console.log(\\"hello world\\");");
 
 // Optional directives.
 // .... /*jslint beta*/ .......... Enable experimental warnings.
 // .... /*jslint bitwise*/ ....... Allow bitwise operators.
 // .... /*jslint browser*/ ....... Assume browser environment.
 // .... /*jslint convert*/ ....... Allow conversion operators.
-// .... /*jslint couch*/ ......... Assume CouchDb environment.
 // .... /*jslint debug*/ ......... Include jslint stack-trace in warnings.
 // .... /*jslint devel*/ ......... Allow console.log() and friends.
-// .... /*jslint eval*/ .......... Allow eval().
 // .... /*jslint for*/ ........... Allow for-statement.
 // .... /*jslint getset*/ ........ Allow get() and set().
-// .... /*jslint indent2*/ ....... Allow 2-space indent.
+// .... /*jslint indent2*/ ....... Use 2-space indent.
 // .... /*jslint long*/ .......... Allow long lines.
 // .... /*jslint name*/ .......... Allow weird property names.
 // .... /*jslint node*/ .......... Assume Node.js environment.
 // .... /*jslint single*/ ........ Allow single-quote strings.
-// .... /*jslint test_internal_error*/ ... Test jslint's internal-error
-// ........................................... handling-ability.
 // .... /*jslint this*/ .......... Allow 'this'.
 // .... /*jslint unordered*/ ..... Allow unordered cases, params, properties,
 // ................................... and variables.
@@ -848,19 +907,8 @@ import jslint from \u0022./jslint.mjs\u0022;
 // ................................... that are not at top of function-scope.
 // .... /*jslint white: true...... Allow messy whitespace.
 
-/*jslint-disable*/
-// TODO: jslint this code-block in future.
-console.log('hello world');
-/*jslint-enable*/
-
-// Suppress warnings on next-line.
-eval( //jslint-quiet
-    "console.log(\\"hello world\\");"
-);
-
 (async function () {
-    let result;
-    result = await new Promise(function (resolve) {
+    let result = await new Promise(function (resolve) {
         https.request("https://www.jslint.com/jslint.mjs", function (res) {
             result = "";
             res.on("data", function (chunk) {
@@ -877,7 +925,16 @@ eval( //jslint-quiet
         console.error(formatted_message);
     });
 }());
-`);
+        `).trim() + "\n");
+    }
+    if (mode_debug) {
+        document.querySelector(
+            "#JSLINT_OPTIONS input[value=debug]"
+        ).click();
     }
     document.querySelector("button[name='JSLint']").click();
+
+// Debug css-style.
+
+    window.dom_style_report_unmatched = dom_style_report_unmatched;
 }());
