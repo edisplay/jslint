@@ -31,6 +31,7 @@
 
 /*property
     dom_style_report_unmatched,
+    focus,
     indentSelection,
     slice, somethingSelected,
     CodeMirror, Pos, Tab, addEventListener, checked, click, closest, closure,
@@ -48,7 +49,7 @@
     warnings, width
 */
 
-import jslint from "./jslint.mjs?cc=etoc";
+import jslint from "./jslint.mjs?cc=yuwf";
 
 // This is the web script companion file for JSLint. It includes code for
 // interacting with the browser and displaying the reports.
@@ -500,7 +501,7 @@ body {
 </style>
             `).trim() + "\n";
     html += "<fieldset id=\"JSLINT_REPORT_WARNINGS\">\n";
-    html += "<legend>Report: Warnings</legend>\n";
+    html += "<legend>Report: Warnings (" + warnings.length + ")</legend>\n";
     html += "<div>\n";
     if (stop) {
         html += "<div class=\"center\">JSLint was unable to finish.</div>\n";
@@ -531,7 +532,11 @@ body {
 // Produce the /*property*/ directive.
 
     html += "<fieldset id=\"JSLINT_REPORT_PROPERTIES\">\n";
-    html += "<legend>Report: Properties</legend>\n";
+    html += (
+        "<legend>Report: Properties ("
+        + Object.keys(property).length
+        + ")</legend>\n"
+    );
     html += "<label>\n";
     html += "<textarea readonly>";
     html += "/*property";
@@ -563,7 +568,7 @@ body {
 // </div>
 
     html += "<fieldset id=\"JSLINT_REPORT_FUNCTIONS\">\n";
-    html += "<legend>Report: Functions</legend>\n";
+    html += "<legend>Report: Functions (" + functions.length + ")</legend>\n";
     html += "<div>\n";
     if (json) {
 
@@ -742,6 +747,7 @@ async function jslint_ui_call() {
 
     setTimeout(function () {
         document.querySelector("#uiLoader1").style.display = "none";
+        editor.focus();
     }, 500);
 }
 
@@ -842,6 +848,7 @@ function jslint_ui_onresize() {
             break;
         case "clear_source":
             editor.setValue("");
+            editor.focus();
             break;
         }
     };
