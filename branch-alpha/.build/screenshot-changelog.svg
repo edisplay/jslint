@@ -143,19 +143,19 @@
     textLength="768"
     x="10"
     y="516"
->- website - display number of warnings, properties, functions in report.                         </tspan>
-<tspan
-    lengthAdjust="spacingAndGlyphs"
-    textLength="768"
-    x="10"
-    y="538"
 >                                                                                                 </tspan>
 <tspan
     lengthAdjust="spacingAndGlyphs"
     textLength="768"
     x="10"
-    y="560"
+    y="538"
 ># v2021.8.1-beta                                                                                 </tspan>
+<tspan
+    lengthAdjust="spacingAndGlyphs"
+    textLength="768"
+    x="10"
+    y="560"
+>- website - display number of warnings, properties, functions in report.                         </tspan>
 <tspan
     lengthAdjust="spacingAndGlyphs"
     textLength="768"

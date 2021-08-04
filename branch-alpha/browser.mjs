@@ -49,7 +49,7 @@
     warnings, width
 */
 
-import jslint from "./jslint.mjs?cc=yuwf";
+import jslint from "./jslint.mjs?cc=567q";
 
 // This is the web script companion file for JSLint. It includes code for
 // interacting with the browser and displaying the reports.
@@ -747,7 +747,6 @@ async function jslint_ui_call() {
 
     setTimeout(function () {
         document.querySelector("#uiLoader1").style.display = "none";
-        editor.focus();
     }, 500);
 }
 
