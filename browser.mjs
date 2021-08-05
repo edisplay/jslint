@@ -49,7 +49,7 @@
     warnings, width
 */
 
-import jslint from "./jslint.mjs?cc=mces";
+import jslint from "./jslint.mjs?cc=zv0v";
 
 // This is the web script companion file for JSLint. It includes code for
 // interacting with the browser and displaying the reports.
@@ -911,7 +911,7 @@ eval("console.log(\\"hello world\\");");
 // ................................... and variables.
 // .... /*jslint variable*/ ...... Allow unordered const and let declarations
 // ................................... that are not at top of function-scope.
-// .... /*jslint white: true...... Allow messy whitespace.
+// .... /*jslint white*/ ......... Allow messy whitespace.
 
 (async function () {
     let result = await new Promise(function (resolve) {
