@@ -49,7 +49,7 @@
     warnings, width
 */
 
-import jslint from "./jslint.mjs?cc=xamm";
+import jslint from "./jslint.mjs?cc=gvd5";
 
 // This is the web script companion file for JSLint. It includes code for
 // interacting with the browser and displaying the reports.
@@ -880,7 +880,7 @@ function jslint_ui_onresize() {
         editor.setValue(String(`
 #!/usr/bin/env node
 /*jslint browser, node*/
-/*global caches, indexedDb*/ //jslint-quiet
+/*global caches, indexedDb*/
 import https from "https";
 import jslint from \u0022./jslint.mjs\u0022;
 
