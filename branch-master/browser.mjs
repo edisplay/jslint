@@ -31,6 +31,7 @@
 
 /*property
     dom_style_report_unmatched,
+    focus,
     indentSelection,
     slice, somethingSelected,
     CodeMirror, Pos, Tab, addEventListener, checked, click, closest, closure,
@@ -48,7 +49,7 @@
     warnings, width
 */
 
-import jslint from "./jslint.mjs?cc=qgcs";
+import jslint from "./jslint.mjs?cc=orli";
 
 // This is the web script companion file for JSLint. It includes code for
 // interacting with the browser and displaying the reports.
@@ -500,7 +501,7 @@ body {
 </style>
             `).trim() + "\n";
     html += "<fieldset id=\"JSLINT_REPORT_WARNINGS\">\n";
-    html += "<legend>Report: Warnings</legend>\n";
+    html += "<legend>Report: Warnings (" + warnings.length + ")</legend>\n";
     html += "<div>\n";
     if (stop) {
         html += "<div class=\"center\">JSLint was unable to finish.</div>\n";
@@ -531,7 +532,11 @@ body {
 // Produce the /*property*/ directive.
 
     html += "<fieldset id=\"JSLINT_REPORT_PROPERTIES\">\n";
-    html += "<legend>Report: Properties</legend>\n";
+    html += (
+        "<legend>Report: Properties ("
+        + Object.keys(property).length
+        + ")</legend>\n"
+    );
     html += "<label>\n";
     html += "<textarea readonly>";
     html += "/*property";
@@ -563,7 +568,7 @@ body {
 // </div>
 
     html += "<fieldset id=\"JSLINT_REPORT_FUNCTIONS\">\n";
-    html += "<legend>Report: Functions</legend>\n";
+    html += "<legend>Report: Functions (" + functions.length + ")</legend>\n";
     html += "<div>\n";
     if (json) {
 
@@ -842,6 +847,7 @@ function jslint_ui_onresize() {
             break;
         case "clear_source":
             editor.setValue("");
+            editor.focus();
             break;
         }
     };
@@ -874,7 +880,7 @@ function jslint_ui_onresize() {
         editor.setValue(String(`
 #!/usr/bin/env node
 /*jslint browser, node*/
-/*global caches, indexedDb*/ //jslint-quiet
+/*global caches, indexedDb*/
 import https from "https";
 import jslint from \u0022./jslint.mjs\u0022;
 
@@ -905,7 +911,7 @@ eval("console.log(\\"hello world\\");");
 // ................................... and variables.
 // .... /*jslint variable*/ ...... Allow unordered const and let declarations
 // ................................... that are not at top of function-scope.
-// .... /*jslint white: true...... Allow messy whitespace.
+// .... /*jslint white*/ ......... Allow messy whitespace.
 
 (async function () {
     let result = await new Promise(function (resolve) {

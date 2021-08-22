@@ -18,6 +18,13 @@
 - node - after node-v14 is deprecated, remove shell-code `export "NODE_OPTIONS=--unhandled-rejections=strict"`.
 - vim - add vim plugin.
 
+# v2021.8.20
+- warning - disable un-ergonomic warnings restricting directive-global (missing_browser and unexpected_directive_a).
+- fs - rename file ci.sh to jslint_ci.sh.
+- license - add codemirror license to rollup-assets.
+- website - display number of warnings, properties, functions in report.
+- website - fix uiLoader getting hidden behind highlighted text.
+
 # v2021.7.24
 - bugfix - fix jslint not warning about function-redefinition when function is defined inside a call.
 - bugfix - fix website crashing when linting pure json-object.
