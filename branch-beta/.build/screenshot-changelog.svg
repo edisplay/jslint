@@ -137,25 +137,25 @@
     textLength="768"
     x="10"
     y="494"
->- vim - add vim plugin.                                                                          </tspan>
-<tspan
-    lengthAdjust="spacingAndGlyphs"
-    textLength="768"
-    x="10"
-    y="516"
 >                                                                                                 </tspan>
 <tspan
     lengthAdjust="spacingAndGlyphs"
     textLength="768"
     x="10"
-    y="538"
+    y="516"
 ># v2021.9.1-beta                                                                                 </tspan>
 <tspan
     lengthAdjust="spacingAndGlyphs"
     textLength="768"
     x="10"
-    y="560"
+    y="538"
 >- jslint - add bigint support.                                                                   </tspan>
+<tspan
+    lengthAdjust="spacingAndGlyphs"
+    textLength="768"
+    x="10"
+    y="560"
+>- vim - add vim-plugin and file jslint.vim.                                                      </tspan>
 <tspan
     lengthAdjust="spacingAndGlyphs"
     textLength="768"
