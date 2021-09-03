@@ -49,7 +49,7 @@
     warnings, width
 */
 
-import jslint from "./jslint.mjs?cc=asns";
+import jslint from "./jslint.mjs?cc=gknd";
 
 // This is the web script companion file for JSLint. It includes code for
 // interacting with the browser and displaying the reports.
@@ -897,7 +897,6 @@ eval("console.log(\\"hello world\\");");
 // .... /*jslint bitwise*/ ....... Allow bitwise operators.
 // .... /*jslint browser*/ ....... Assume browser environment.
 // .... /*jslint convert*/ ....... Allow conversion operators.
-// .... /*jslint debug*/ ......... Include jslint stack-trace in warnings.
 // .... /*jslint devel*/ ......... Allow console.log() and friends.
 // .... /*jslint for*/ ........... Allow for-statement.
 // .... /*jslint getset*/ ........ Allow get() and set().
@@ -907,6 +906,7 @@ eval("console.log(\\"hello world\\");");
 // .... /*jslint node*/ .......... Assume Node.js environment.
 // .... /*jslint single*/ ........ Allow single-quote strings.
 // .... /*jslint this*/ .......... Allow 'this'.
+// .... /*jslint trace*/ ......... Include jslint stack-trace in warnings.
 // .... /*jslint unordered*/ ..... Allow unordered cases, params, properties,
 // ................................... and variables.
 // .... /*jslint variable*/ ...... Allow unordered const and let declarations
