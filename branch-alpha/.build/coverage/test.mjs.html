@@ -197,7 +197,7 @@ body {
 <pre><span class="lineno"><a href="#line_68" id="line_68">   68.</a></span><span class="count                ">      1</span><span>        file: &quot;syntax-error.js&quot;,</span></pre>
 <pre><span class="lineno"><a href="#line_69" id="line_69">   69.</a></span><span class="count                ">      1</span><span>        mode_cli: true,</span></pre>
 <pre><span class="lineno"><a href="#line_70" id="line_70">   70.</a></span><span class="count                ">      1</span><span>        option: {</span></pre>
-<pre><span class="lineno"><a href="#line_71" id="line_71">   71.</a></span><span class="count                ">      1</span><span>            debug: true</span></pre>
+<pre><span class="lineno"><a href="#line_71" id="line_71">   71.</a></span><span class="count                ">      1</span><span>            trace: true</span></pre>
 <pre><span class="lineno"><a href="#line_72" id="line_72">   72.</a></span><span class="count                ">      1</span><span>        },</span></pre>
 <pre><span class="lineno"><a href="#line_73" id="line_73">   73.</a></span><span class="count                ">      1</span><span>        process_exit: processExit1,</span></pre>
 <pre><span class="lineno"><a href="#line_74" id="line_74">   74.</a></span><span class="count                ">      1</span><span>        source: &quot;syntax error&quot;</span></pre>
@@ -207,45 +207,45 @@ body {
 <pre><span class="lineno"><a href="#line_78" id="line_78">   78.</a></span><span class="count                ">      1</span><span>        // suppress error</span></pre>
 <pre><span class="lineno"><a href="#line_79" id="line_79">   79.</a></span><span class="count                ">      1</span><span>        console_error: noop,</span></pre>
 <pre><span class="lineno"><a href="#line_80" id="line_80">   80.</a></span><span class="count                ">      1</span><span>        mode_cli: true,</span></pre>
-<pre><span class="lineno"><a href="#line_81" id="line_81">   81.</a></span><span class="count                ">      1</span><span>        option: {</span></pre>
-<pre><span class="lineno"><a href="#line_82" id="line_82">   82.</a></span><span class="count                ">      1</span><span>            debug: true</span></pre>
-<pre><span class="lineno"><a href="#line_83" id="line_83">   83.</a></span><span class="count                ">      1</span><span>        },</span></pre>
-<pre><span class="lineno"><a href="#line_84" id="line_84">   84.</a></span><span class="count                ">      1</span><span>        process_argv: [</span></pre>
-<pre><span class="lineno"><a href="#line_85" id="line_85">   85.</a></span><span class="count                ">      1</span><span>            &quot;node&quot;,</span></pre>
-<pre><span class="lineno"><a href="#line_86" id="line_86">   86.</a></span><span class="count                ">      1</span><span>            &quot;jslint.mjs&quot;,</span></pre>
-<pre><span class="lineno"><a href="#line_87" id="line_87">   87.</a></span><span class="count                ">      1</span><span>            &quot;--mode-vim-plugin&quot;,</span></pre>
-<pre><span class="lineno"><a href="#line_88" id="line_88">   88.</a></span><span class="count                ">      1</span><span>            &quot;syntax-error.js&quot;</span></pre>
-<pre><span class="lineno"><a href="#line_89" id="line_89">   89.</a></span><span class="count                ">      1</span><span>        ],</span></pre>
-<pre><span class="lineno"><a href="#line_90" id="line_90">   90.</a></span><span class="count                ">      1</span><span>        process_exit: processExit1,</span></pre>
-<pre><span class="lineno"><a href="#line_91" id="line_91">   91.</a></span><span class="count                ">      1</span><span>        source: &quot;syntax error&quot;</span></pre>
-<pre><span class="lineno"><a href="#line_92" id="line_92">   92.</a></span><span class="count                ">      1</span><span>    });</span></pre>
-<pre><span class="lineno"><a href="#line_93" id="line_93">   93.</a></span><span class="count                ">      1</span><span>}());</span></pre>
-<pre><span class="lineno"><a href="#line_94" id="line_94">   94.</a></span><span class="count                ">      1</span><span></span></pre>
-<pre><span class="lineno"><a href="#line_95" id="line_95">   95.</a></span><span class="count                ">      1</span><span>(function testCaseJslintCodeValidate() {</span></pre>
-<pre><span class="lineno"><a href="#line_96" id="line_96">   96.</a></span><span class="count                ">      1</span><span>/*</span></pre>
-<pre><span class="lineno"><a href="#line_97" id="line_97">   97.</a></span><span class="count                ">      1</span><span> * this function will validate each code is valid in jslint</span></pre>
-<pre><span class="lineno"><a href="#line_98" id="line_98">   98.</a></span><span class="count                ">      1</span><span> */</span></pre>
-<pre><span class="lineno"><a href="#line_99" id="line_99">   99.</a></span><span class="count                ">      1</span><span>    Object.values({</span></pre>
-<pre><span class="lineno"><a href="#line_100" id="line_100">  100.</a></span><span class="count                ">      1</span><span>        array: [</span></pre>
-<pre><span class="lineno"><a href="#line_101" id="line_101">  101.</a></span><span class="count                ">      1</span><span>            &quot;new Array(0);&quot;</span></pre>
-<pre><span class="lineno"><a href="#line_102" id="line_102">  102.</a></span><span class="count                ">      1</span><span>        ],</span></pre>
-<pre><span class="lineno"><a href="#line_103" id="line_103">  103.</a></span><span class="count                ">      1</span><span>        async_await: [</span></pre>
-<pre><span class="lineno"><a href="#line_104" id="line_104">  104.</a></span><span class="count                ">      1</span><span>            &quot;async function aa() {\n    await aa();\n}&quot;,</span></pre>
-<pre><span class="lineno"><a href="#line_105" id="line_105">  105.</a></span><span class="count                ">      1</span><span>            &quot;async function aa() {\n&quot;</span></pre>
-<pre><span class="lineno"><a href="#line_106" id="line_106">  106.</a></span><span class="count                ">      1</span><span>            + &quot;    try {\n&quot;</span></pre>
-<pre><span class="lineno"><a href="#line_107" id="line_107">  107.</a></span><span class="count                ">      1</span><span>            + &quot;        aa();\n&quot;</span></pre>
-<pre><span class="lineno"><a href="#line_108" id="line_108">  108.</a></span><span class="count                ">      1</span><span>            + &quot;    } catch (err) {\n&quot;</span></pre>
-<pre><span class="lineno"><a href="#line_109" id="line_109">  109.</a></span><span class="count                ">      1</span><span>            + &quot;        await err();\n&quot;</span></pre>
-<pre><span class="lineno"><a href="#line_110" id="line_110">  110.</a></span><span class="count                ">      1</span><span>            + &quot;    }\n&quot;</span></pre>
-<pre><span class="lineno"><a href="#line_111" id="line_111">  111.</a></span><span class="count                ">      1</span><span>            + &quot;}\n&quot;,</span></pre>
-<pre><span class="lineno"><a href="#line_112" id="line_112">  112.</a></span><span class="count                ">      1</span><span>            &quot;async function aa() {\n&quot;</span></pre>
-<pre><span class="lineno"><a href="#line_113" id="line_113">  113.</a></span><span class="count                ">      1</span><span>            + &quot;    try {\n&quot;</span></pre>
-<pre><span class="lineno"><a href="#line_114" id="line_114">  114.</a></span><span class="count                ">      1</span><span>            + &quot;        await aa();\n&quot;</span></pre>
-<pre><span class="lineno"><a href="#line_115" id="line_115">  115.</a></span><span class="count                ">      1</span><span>            + &quot;    } catch (err) {\n&quot;</span></pre>
-<pre><span class="lineno"><a href="#line_116" id="line_116">  116.</a></span><span class="count                ">      1</span><span>            + &quot;        await err();\n&quot;</span></pre>
-<pre><span class="lineno"><a href="#line_117" id="line_117">  117.</a></span><span class="count                ">      1</span><span>            + &quot;    }\n&quot;</span></pre>
-<pre><span class="lineno"><a href="#line_118" id="line_118">  118.</a></span><span class="count                ">      1</span><span>            + &quot;}\n&quot;</span></pre>
-<pre><span class="lineno"><a href="#line_119" id="line_119">  119.</a></span><span class="count                ">      1</span><span>        ],</span></pre>
+<pre><span class="lineno"><a href="#line_81" id="line_81">   81.</a></span><span class="count                ">      1</span><span>        process_argv: [</span></pre>
+<pre><span class="lineno"><a href="#line_82" id="line_82">   82.</a></span><span class="count                ">      1</span><span>            &quot;node&quot;,</span></pre>
+<pre><span class="lineno"><a href="#line_83" id="line_83">   83.</a></span><span class="count                ">      1</span><span>            &quot;jslint.mjs&quot;,</span></pre>
+<pre><span class="lineno"><a href="#line_84" id="line_84">   84.</a></span><span class="count                ">      1</span><span>            &quot;--mode-vim-plugin&quot;,</span></pre>
+<pre><span class="lineno"><a href="#line_85" id="line_85">   85.</a></span><span class="count                ">      1</span><span>            &quot;syntax-error.js&quot;</span></pre>
+<pre><span class="lineno"><a href="#line_86" id="line_86">   86.</a></span><span class="count                ">      1</span><span>        ],</span></pre>
+<pre><span class="lineno"><a href="#line_87" id="line_87">   87.</a></span><span class="count                ">      1</span><span>        process_exit: processExit1,</span></pre>
+<pre><span class="lineno"><a href="#line_88" id="line_88">   88.</a></span><span class="count                ">      1</span><span>        source: &quot;syntax error&quot;</span></pre>
+<pre><span class="lineno"><a href="#line_89" id="line_89">   89.</a></span><span class="count                ">      1</span><span>    });</span></pre>
+<pre><span class="lineno"><a href="#line_90" id="line_90">   90.</a></span><span class="count                ">      1</span><span>}());</span></pre>
+<pre><span class="lineno"><a href="#line_91" id="line_91">   91.</a></span><span class="count                ">      1</span><span></span></pre>
+<pre><span class="lineno"><a href="#line_92" id="line_92">   92.</a></span><span class="count                ">      1</span><span>(function testCaseJslintCodeValidate() {</span></pre>
+<pre><span class="lineno"><a href="#line_93" id="line_93">   93.</a></span><span class="count                ">      1</span><span>/*</span></pre>
+<pre><span class="lineno"><a href="#line_94" id="line_94">   94.</a></span><span class="count                ">      1</span><span> * this function will validate each code is valid in jslint</span></pre>
+<pre><span class="lineno"><a href="#line_95" id="line_95">   95.</a></span><span class="count                ">      1</span><span> */</span></pre>
+<pre><span class="lineno"><a href="#line_96" id="line_96">   96.</a></span><span class="count                ">      1</span><span>    Object.values({</span></pre>
+<pre><span class="lineno"><a href="#line_97" id="line_97">   97.</a></span><span class="count                ">      1</span><span>        array: [</span></pre>
+<pre><span class="lineno"><a href="#line_98" id="line_98">   98.</a></span><span class="count                ">      1</span><span>            &quot;new Array(0);&quot;</span></pre>
+<pre><span class="lineno"><a href="#line_99" id="line_99">   99.</a></span><span class="count                ">      1</span><span>        ],</span></pre>
+<pre><span class="lineno"><a href="#line_100" id="line_100">  100.</a></span><span class="count                ">      1</span><span>        async_await: [</span></pre>
+<pre><span class="lineno"><a href="#line_101" id="line_101">  101.</a></span><span class="count                ">      1</span><span>            &quot;async function aa() {\n    await aa();\n}&quot;,</span></pre>
+<pre><span class="lineno"><a href="#line_102" id="line_102">  102.</a></span><span class="count                ">      1</span><span>            &quot;async function aa() {\n&quot;</span></pre>
+<pre><span class="lineno"><a href="#line_103" id="line_103">  103.</a></span><span class="count                ">      1</span><span>            + &quot;    try {\n&quot;</span></pre>
+<pre><span class="lineno"><a href="#line_104" id="line_104">  104.</a></span><span class="count                ">      1</span><span>            + &quot;        aa();\n&quot;</span></pre>
+<pre><span class="lineno"><a href="#line_105" id="line_105">  105.</a></span><span class="count                ">      1</span><span>            + &quot;    } catch (err) {\n&quot;</span></pre>
+<pre><span class="lineno"><a href="#line_106" id="line_106">  106.</a></span><span class="count                ">      1</span><span>            + &quot;        await err();\n&quot;</span></pre>
+<pre><span class="lineno"><a href="#line_107" id="line_107">  107.</a></span><span class="count                ">      1</span><span>            + &quot;    }\n&quot;</span></pre>
+<pre><span class="lineno"><a href="#line_108" id="line_108">  108.</a></span><span class="count                ">      1</span><span>            + &quot;}\n&quot;,</span></pre>
+<pre><span class="lineno"><a href="#line_109" id="line_109">  109.</a></span><span class="count                ">      1</span><span>            &quot;async function aa() {\n&quot;</span></pre>
+<pre><span class="lineno"><a href="#line_110" id="line_110">  110.</a></span><span class="count                ">      1</span><span>            + &quot;    try {\n&quot;</span></pre>
+<pre><span class="lineno"><a href="#line_111" id="line_111">  111.</a></span><span class="count                ">      1</span><span>            + &quot;        await aa();\n&quot;</span></pre>
+<pre><span class="lineno"><a href="#line_112" id="line_112">  112.</a></span><span class="count                ">      1</span><span>            + &quot;    } catch (err) {\n&quot;</span></pre>
+<pre><span class="lineno"><a href="#line_113" id="line_113">  113.</a></span><span class="count                ">      1</span><span>            + &quot;        await err();\n&quot;</span></pre>
+<pre><span class="lineno"><a href="#line_114" id="line_114">  114.</a></span><span class="count                ">      1</span><span>            + &quot;    }\n&quot;</span></pre>
+<pre><span class="lineno"><a href="#line_115" id="line_115">  115.</a></span><span class="count                ">      1</span><span>            + &quot;}\n&quot;</span></pre>
+<pre><span class="lineno"><a href="#line_116" id="line_116">  116.</a></span><span class="count                ">      1</span><span>        ],</span></pre>
+<pre><span class="lineno"><a href="#line_117" id="line_117">  117.</a></span><span class="count                ">      1</span><span></span></pre>
+<pre><span class="lineno"><a href="#line_118" id="line_118">  118.</a></span><span class="count                ">      1</span><span>// PR-351 - Add BigInt support.</span></pre>
+<pre><span class="lineno"><a href="#line_119" id="line_119">  119.</a></span><span class="count                ">      1</span><span></span></pre>
 <pre><span class="lineno"><a href="#line_120" id="line_120">  120.</a></span><span class="count                ">      1</span><span>        bigint: [</span></pre>
 <pre><span class="lineno"><a href="#line_121" id="line_121">  121.</a></span><span class="count                ">      1</span><span>            &quot;let aa = 0b0n;\n&quot;,</span></pre>
 <pre><span class="lineno"><a href="#line_122" id="line_122">  122.</a></span><span class="count                ">      1</span><span>            &quot;let aa = 0o0n;\n&quot;,</span></pre>
@@ -404,43 +404,43 @@ body {
 <pre><span class="lineno"><a href="#line_275" id="line_275">  275.</a></span><span class="count                ">      1</span><span>        ], [</span></pre>
 <pre><span class="lineno"><a href="#line_276" id="line_276">  276.</a></span><span class="count                ">      1</span><span>            &quot;registerType();&quot;, {couch: true}, []</span></pre>
 <pre><span class="lineno"><a href="#line_277" id="line_277">  277.</a></span><span class="count                ">      1</span><span>        ], [</span></pre>
-<pre><span class="lineno"><a href="#line_278" id="line_278">  278.</a></span><span class="count                ">      1</span><span>            &quot;&quot;, {debug: true}, []</span></pre>
+<pre><span class="lineno"><a href="#line_278" id="line_278">  278.</a></span><span class="count                ">      1</span><span>            &quot;debugger;&quot;, {devel: true}, []</span></pre>
 <pre><span class="lineno"><a href="#line_279" id="line_279">  279.</a></span><span class="count                ">      1</span><span>        ], [</span></pre>
-<pre><span class="lineno"><a href="#line_280" id="line_280">  280.</a></span><span class="count                ">      1</span><span>            &quot;debugger;&quot;, {devel: true}, []</span></pre>
+<pre><span class="lineno"><a href="#line_280" id="line_280">  280.</a></span><span class="count                ">      1</span><span>            &quot;new Function();\neval();&quot;, {eval: true}, []</span></pre>
 <pre><span class="lineno"><a href="#line_281" id="line_281">  281.</a></span><span class="count                ">      1</span><span>        ], [</span></pre>
-<pre><span class="lineno"><a href="#line_282" id="line_282">  282.</a></span><span class="count                ">      1</span><span>            &quot;new Function();\neval();&quot;, {eval: true}, []</span></pre>
-<pre><span class="lineno"><a href="#line_283" id="line_283">  283.</a></span><span class="count                ">      1</span><span>        ], [</span></pre>
-<pre><span class="lineno"><a href="#line_284" id="line_284">  284.</a></span><span class="count                ">      1</span><span>            (</span></pre>
-<pre><span class="lineno"><a href="#line_285" id="line_285">  285.</a></span><span class="count                ">      1</span><span>                &quot;function aa(aa) {\n&quot;</span></pre>
-<pre><span class="lineno"><a href="#line_286" id="line_286">  286.</a></span><span class="count                ">      1</span><span>                + &quot;    for (aa = 0; aa &lt; 0; aa += 1) {\n&quot;</span></pre>
-<pre><span class="lineno"><a href="#line_287" id="line_287">  287.</a></span><span class="count                ">      1</span><span>                + &quot;        aa();\n&quot;</span></pre>
-<pre><span class="lineno"><a href="#line_288" id="line_288">  288.</a></span><span class="count                ">      1</span><span>                + &quot;    }\n&quot;</span></pre>
-<pre><span class="lineno"><a href="#line_289" id="line_289">  289.</a></span><span class="count                ">      1</span><span>                + &quot;}\n&quot;</span></pre>
-<pre><span class="lineno"><a href="#line_290" id="line_290">  290.</a></span><span class="count                ">      1</span><span>            ), {for: true}, []</span></pre>
+<pre><span class="lineno"><a href="#line_282" id="line_282">  282.</a></span><span class="count                ">      1</span><span>            (</span></pre>
+<pre><span class="lineno"><a href="#line_283" id="line_283">  283.</a></span><span class="count                ">      1</span><span>                &quot;function aa(aa) {\n&quot;</span></pre>
+<pre><span class="lineno"><a href="#line_284" id="line_284">  284.</a></span><span class="count                ">      1</span><span>                + &quot;    for (aa = 0; aa &lt; 0; aa += 1) {\n&quot;</span></pre>
+<pre><span class="lineno"><a href="#line_285" id="line_285">  285.</a></span><span class="count                ">      1</span><span>                + &quot;        aa();\n&quot;</span></pre>
+<pre><span class="lineno"><a href="#line_286" id="line_286">  286.</a></span><span class="count                ">      1</span><span>                + &quot;    }\n&quot;</span></pre>
+<pre><span class="lineno"><a href="#line_287" id="line_287">  287.</a></span><span class="count                ">      1</span><span>                + &quot;}\n&quot;</span></pre>
+<pre><span class="lineno"><a href="#line_288" id="line_288">  288.</a></span><span class="count                ">      1</span><span>            ), {for: true}, []</span></pre>
+<pre><span class="lineno"><a href="#line_289" id="line_289">  289.</a></span><span class="count                ">      1</span><span>        ], [</span></pre>
+<pre><span class="lineno"><a href="#line_290" id="line_290">  290.</a></span><span class="count                ">      1</span><span>            &quot;let aa = {get aa() {\n    return;\n}};&quot;, {getset: true}, []</span></pre>
 <pre><span class="lineno"><a href="#line_291" id="line_291">  291.</a></span><span class="count                ">      1</span><span>        ], [</span></pre>
-<pre><span class="lineno"><a href="#line_292" id="line_292">  292.</a></span><span class="count                ">      1</span><span>            &quot;let aa = {get aa() {\n    return;\n}};&quot;, {getset: true}, []</span></pre>
+<pre><span class="lineno"><a href="#line_292" id="line_292">  292.</a></span><span class="count                ">      1</span><span>            &quot;let aa = {set aa(aa) {\n    return aa;\n}};&quot;, {getset: true}, []</span></pre>
 <pre><span class="lineno"><a href="#line_293" id="line_293">  293.</a></span><span class="count                ">      1</span><span>        ], [</span></pre>
-<pre><span class="lineno"><a href="#line_294" id="line_294">  294.</a></span><span class="count                ">      1</span><span>            &quot;let aa = {set aa(aa) {\n    return aa;\n}};&quot;, {getset: true}, []</span></pre>
-<pre><span class="lineno"><a href="#line_295" id="line_295">  295.</a></span><span class="count                ">      1</span><span>        ], [</span></pre>
-<pre><span class="lineno"><a href="#line_296" id="line_296">  296.</a></span><span class="count                ">      1</span><span>            String(</span></pre>
-<pre><span class="lineno"><a href="#line_297" id="line_297">  297.</a></span><span class="count                ">      1</span><span>                await moduleFs.promises.readFile(&quot;jslint.mjs&quot;, &quot;utf8&quot;)</span></pre>
-<pre><span class="lineno"><a href="#line_298" id="line_298">  298.</a></span><span class="count                ">      1</span><span>            ).replace((</span></pre>
-<pre><span class="lineno"><a href="#line_299" id="line_299">  299.</a></span><span class="count                ">      1</span><span>                /\u0020{4}/g</span></pre>
-<pre><span class="lineno"><a href="#line_300" id="line_300">  300.</a></span><span class="count                ">      1</span><span>            ), &quot;  &quot;),</span></pre>
-<pre><span class="lineno"><a href="#line_301" id="line_301">  301.</a></span><span class="count                ">      1</span><span>            {indent2: true},</span></pre>
-<pre><span class="lineno"><a href="#line_302" id="line_302">  302.</a></span><span class="count                ">      1</span><span>            []</span></pre>
+<pre><span class="lineno"><a href="#line_294" id="line_294">  294.</a></span><span class="count                ">      1</span><span>            String(</span></pre>
+<pre><span class="lineno"><a href="#line_295" id="line_295">  295.</a></span><span class="count                ">      1</span><span>                await moduleFs.promises.readFile(&quot;jslint.mjs&quot;, &quot;utf8&quot;)</span></pre>
+<pre><span class="lineno"><a href="#line_296" id="line_296">  296.</a></span><span class="count                ">      1</span><span>            ).replace((</span></pre>
+<pre><span class="lineno"><a href="#line_297" id="line_297">  297.</a></span><span class="count                ">      1</span><span>                /\u0020{4}/g</span></pre>
+<pre><span class="lineno"><a href="#line_298" id="line_298">  298.</a></span><span class="count                ">      1</span><span>            ), &quot;  &quot;),</span></pre>
+<pre><span class="lineno"><a href="#line_299" id="line_299">  299.</a></span><span class="count                ">      1</span><span>            {indent2: true},</span></pre>
+<pre><span class="lineno"><a href="#line_300" id="line_300">  300.</a></span><span class="count                ">      1</span><span>            []</span></pre>
+<pre><span class="lineno"><a href="#line_301" id="line_301">  301.</a></span><span class="count                ">      1</span><span>        ], [</span></pre>
+<pre><span class="lineno"><a href="#line_302" id="line_302">  302.</a></span><span class="count                ">      1</span><span>            &quot;function aa() {\n  return;\n}&quot;, {indent2: true}, []</span></pre>
 <pre><span class="lineno"><a href="#line_303" id="line_303">  303.</a></span><span class="count                ">      1</span><span>        ], [</span></pre>
-<pre><span class="lineno"><a href="#line_304" id="line_304">  304.</a></span><span class="count                ">      1</span><span>            &quot;function aa() {\n  return;\n}&quot;, {indent2: true}, []</span></pre>
+<pre><span class="lineno"><a href="#line_304" id="line_304">  304.</a></span><span class="count                ">      1</span><span>            &quot;/&quot;.repeat(100), {long: true}, []</span></pre>
 <pre><span class="lineno"><a href="#line_305" id="line_305">  305.</a></span><span class="count                ">      1</span><span>        ], [</span></pre>
-<pre><span class="lineno"><a href="#line_306" id="line_306">  306.</a></span><span class="count                ">      1</span><span>            &quot;/&quot;.repeat(100), {long: true}, []</span></pre>
+<pre><span class="lineno"><a href="#line_306" id="line_306">  306.</a></span><span class="count                ">      1</span><span>            &quot;let aa = aa._;&quot;, {name: true}, []</span></pre>
 <pre><span class="lineno"><a href="#line_307" id="line_307">  307.</a></span><span class="count                ">      1</span><span>        ], [</span></pre>
-<pre><span class="lineno"><a href="#line_308" id="line_308">  308.</a></span><span class="count                ">      1</span><span>            &quot;let aa = aa._;&quot;, {name: true}, []</span></pre>
+<pre><span class="lineno"><a href="#line_308" id="line_308">  308.</a></span><span class="count                ">      1</span><span>            &quot;require();&quot;, {node: true}, []</span></pre>
 <pre><span class="lineno"><a href="#line_309" id="line_309">  309.</a></span><span class="count                ">      1</span><span>        ], [</span></pre>
-<pre><span class="lineno"><a href="#line_310" id="line_310">  310.</a></span><span class="count                ">      1</span><span>            &quot;require();&quot;, {node: true}, []</span></pre>
+<pre><span class="lineno"><a href="#line_310" id="line_310">  310.</a></span><span class="count                ">      1</span><span>            &quot;let aa = &apos;aa&apos;;&quot;, {single: true}, []</span></pre>
 <pre><span class="lineno"><a href="#line_311" id="line_311">  311.</a></span><span class="count                ">      1</span><span>        ], [</span></pre>
-<pre><span class="lineno"><a href="#line_312" id="line_312">  312.</a></span><span class="count                ">      1</span><span>            &quot;let aa = &apos;aa&apos;;&quot;, {single: true}, []</span></pre>
+<pre><span class="lineno"><a href="#line_312" id="line_312">  312.</a></span><span class="count                ">      1</span><span>            &quot;let aa = this;&quot;, {this: true}, []</span></pre>
 <pre><span class="lineno"><a href="#line_313" id="line_313">  313.</a></span><span class="count                ">      1</span><span>        ], [</span></pre>
-<pre><span class="lineno"><a href="#line_314" id="line_314">  314.</a></span><span class="count                ">      1</span><span>            &quot;let aa = this;&quot;, {this: true}, []</span></pre>
+<pre><span class="lineno"><a href="#line_314" id="line_314">  314.</a></span><span class="count                ">      1</span><span>            &quot;&quot;, {trace: true}, []</span></pre>
 <pre><span class="lineno"><a href="#line_315" id="line_315">  315.</a></span><span class="count                ">      1</span><span>        ], [</span></pre>
 <pre><span class="lineno"><a href="#line_316" id="line_316">  316.</a></span><span class="count                ">      1</span><span>            (</span></pre>
 <pre><span class="lineno"><a href="#line_317" id="line_317">  317.</a></span><span class="count                ">      1</span><span>                &quot;function aa({bb, aa}) {\n&quot;</span></pre>
