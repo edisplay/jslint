@@ -8,17 +8,6 @@
 Douglas Crockford <douglas@crockford.com>
 
 
-# Table of Contents
-1. [Status](#status)
-2. [Web Demo](#web-demo)
-3. [Web Demo Archived](#web-demo-archived)
-4. [Install](#install)
-5. [Description](#description)
-6. [Package Listing](#package-listing)
-7. [Changelog](#changelog)
-8. [License](#license)
-
-
 # Status
 | Branch | [master<br>(v2021.8.20)](https://github.com/jslint-org/jslint/tree/master) | [beta<br>(Web Demo)](https://github.com/jslint-org/jslint/tree/beta) | [alpha<br>(Development)](https://github.com/jslint-org/jslint/tree/alpha) |
 |--:|:--:|:--:|:--:|
@@ -26,6 +15,16 @@ Douglas Crockford <douglas@crockford.com>
 | Coverage | [![coverage](https://jslint-org.github.io/jslint/branch-alpha/.build/coverage/coverage-badge.svg)](https://jslint-org.github.io/jslint/branch-alpha/.build/coverage/index.html) | [![coverage](https://jslint-org.github.io/jslint/branch-alpha/.build/coverage/coverage-badge.svg)](https://jslint-org.github.io/jslint/branch-alpha/.build/coverage/index.html) | [![coverage](https://jslint-org.github.io/jslint/branch-alpha/.build/coverage/coverage-badge.svg)](https://jslint-org.github.io/jslint/branch-alpha/.build/coverage/index.html) |
 | Demo | [<img src="asset-image-logo-512.svg" height="32">](https://jslint-org.github.io/jslint/branch-alpha/index.html) | [<img src="asset-image-logo-512.svg" height="32">](https://jslint-org.github.io/jslint/branch-alpha/index.html) | [<img src="asset-image-logo-512.svg" height="32">](https://jslint-org.github.io/jslint/branch-alpha/index.html) |
 | Artifacts | [<img src="asset-image-folder-open-solid.svg" height="30">](https://github.com/jslint-org/jslint/tree/gh-pages/branch-alpha/.build) | [<img src="asset-image-folder-open-solid.svg" height="30">](https://github.com/jslint-org/jslint/tree/gh-pages/branch-alpha/.build) | [<img src="asset-image-folder-open-solid.svg" height="30">](https://github.com/jslint-org/jslint/tree/gh-pages/branch-alpha/.build) |
+
+
+# Table of Contents
+1. [Web Demo](#web-demo)
+2. [Web Demo Archived](#web-demo-archived)
+3. [Install](#install)
+4. [Description](#description)
+5. [Package Listing](#package-listing)
+6. [Changelog](#changelog)
+7. [License](#license)
 
 
 # Web Demo
